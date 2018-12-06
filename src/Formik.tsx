@@ -34,6 +34,7 @@ export class Formik<Values = object, ExtraProps = {}> extends React.Component<
     validateOnBlur: true,
     isInitialValid: false,
     enableReinitialize: false,
+    useIsValidating: true,
   };
 
   initialValues: Values;
@@ -258,7 +259,9 @@ export class Formik<Values = object, ExtraProps = {}> extends React.Component<
   runValidations = (
     values: FormikValues = this.state.values
   ): Promise<FormikErrors<Values>> => {
-    this.setState({ isValidating: true });
+    if (this.props.useIsValidating) {
+      this.setState({ isValidating: true });
+    }
     return Promise.all([
       this.runFieldLevelValidations(values),
       this.props.validationSchema ? this.runValidationSchema(values) : {},
